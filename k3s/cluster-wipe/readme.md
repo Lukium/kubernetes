@@ -16,17 +16,17 @@ The nodes array is the list of hosts that the script will connect to for wiping 
 - node IP address: [IPv4 node IP] Examples: 192.168.1.10, 10.10.6.100
 
 An example list of nodes would look something like this:
-nodes[master1]=192.168.10.171 \n
-nodes[master2]=192.168.10.172
-nodes[master3]=192.168.10.173
-nodes[storage1]=192.168.10.181
-nodes[storage2]=192.168.10.182
-nodes[storage3]=192.168.10.183
-nodes[worker1]=192.168.10.191
-nodes[worker2]=192.168.10.192
-nodes[worker3]=192.168.10.193
-nodes[worker4]=192.168.10.194
-nodes[worker5]=192.168.10.195
+nodes[master1]=192.168.10.171  
+nodes[master2]=192.168.10.172  
+nodes[master3]=192.168.10.173  
+nodes[storage1]=192.168.10.181  
+nodes[storage2]=192.168.10.182  
+nodes[storage3]=192.168.10.183  
+nodes[worker1]=192.168.10.191  
+nodes[worker2]=192.168.10.192  
+nodes[worker3]=192.168.10.193  
+nodes[worker4]=192.168.10.194  
+nodes[worker5]=192.168.10.195  
 
 ## Process:
 1. The script first splits the nodes into a **masters** and **agents** arrays due to different scripts being used to uninstall k3s depending on node type
