@@ -8,7 +8,8 @@
 - wipe_config: [default="true"] = If true, it will delete the ~/.kube folder on the node running this script. Seems especially necessary if a new k3s install will be taking place from this node, otherwise the new install will fail. You should only need to set this to "false" if for some reason you will need to backup the ~/.kube folder for some purpose
 
 ## Nodes Array:
-### VERY IMPORTANT: master nodes MUST be declared as `master#` for example: `nodes[master1]=192.168.10.171`
+### VERY IMPORTANT:  
+master nodes MUST be declared as `master#` for example: `nodes[master1]=192.168.10.171`
 
 The nodes array is the list of hosts that the script will connect to for wiping the cluster. Each node should declaration has 3 parts:
 - array: node (same for all nodes)
