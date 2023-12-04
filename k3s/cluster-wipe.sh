@@ -1,4 +1,5 @@
 #!/bin/bash
+clear
 
 echo
 echo -e " \033[31;5m  ██╗     ██╗   ██╗██╗  ██╗██╗██╗   ██╗███╗   ███╗  \033[0m"
@@ -78,9 +79,17 @@ for key in $(printf "%s\n" "${!agents[@]}" | sort); do
     echo -e "\e[35m$key: ${agents[$key]}\e[0m"
 done
 
+echo
+echo -e "\e[31m    _   _   __   ___  __  _  _  __  _   __  \e[0m"
+echo -e "\e[31m   | | | | /  \ | _ \|  \| || ||  \| | / _] \e[0m"
+echo -e "\e[31m   | 'V' || /\ || v /| | ' || || | ' || [/\ \e[0m"
+echo -e "\e[31m   !_/ \_!|_||_||_|_\|_|\__||_||_|\__| \__/ \e[0m"
+echo
+
 # Pause and warn user in red text that proceeding will wipe all nodes
-echo -e "\e[31mWARNING: This will wipe all nodes in the cluster\e[0m"
-read -p "Press enter to continue"
+echo -e "\e[31mThis will wipe k3s from all the hosts listed above\e[0m"
+echo -e "\e[31mPress CTRL+C to CANCEL\e[0m. \e[32mPress enter to continue...\e[0m"
+read -p ""
 
 
 # if use_ssh_passphrase, then check if id_rsa is in .ssh folder if not run from home folder
