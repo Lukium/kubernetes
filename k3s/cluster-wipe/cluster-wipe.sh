@@ -83,10 +83,10 @@ for key in $(printf "%s\n" "${!agents[@]}" | sort); do
 done
 
 echo
-echo -e "\e[31m    _   _   __   ___  __  _  _  __  _   __  \e[0m"
-echo -e "\e[31m   | | | | /  \ | _ \|  \| || ||  \| | / _] \e[0m"
-echo -e "\e[31m   | 'V' || /\ || v /| | ' || || | ' || [/\ \e[0m"
-echo -e "\e[31m   !_/ \_!|_||_||_|_\|_|\__||_||_|\__| \__/ \e[0m"
+echo -e "\e[31m    _   _   __   ___  __  _  _  __  _   __   _  \e[0m"
+echo -e "\e[31m   | | | | /  \ | _ \|  \| || ||  \| | / _] / \ \e[0m"
+echo -e "\e[31m   | 'V' || /\ || v /| | ' || || | ' || [/\ \_/ \e[0m"
+echo -e "\e[31m   !_/ \_!|_||_||_|_\|_|\__||_||_|\__| \__/ (_) \e[0m"
 echo
 
 # Pause and warn user in red text that proceeding will wipe all nodes
