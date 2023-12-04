@@ -1,0 +1,55 @@
+globalArguments:
+  - "--global.sendanonymoususage=false"
+  - "--global.checknewversion=false"
+
+additionalArguments:
+  - "--serversTransport.insecureSkipVerify=true"
+  - "--log.level=INFO"
+
+deployment:
+  enabled: true
+  replicas: 2 # match with number of workers
+  annotations: {}
+  podAnnotations: {}
+  additionalContainers: []
+  initContainers: []
+
+nodeSelector: 
+  worker: "true" # add these labels to your worker nodes before running - see video
+
+ports:
+  web:
+    redirectTo:
+      port: websecure
+      priority: 10
+  websecure:
+    tls:
+      enabled: true
+      
+ingressRoute:
+  dashboard:
+    enabled: false
+
+providers:
+  kubernetesCRD:
+    enabled: true
+    ingressClass: traefik-external
+    allowExternalNameServices: true
+  kubernetesIngress:
+    enabled: true
+    allowExternalNameServices: true
+    publishedService:
+      enabled: false
+
+rbac:
+  enabled: true
+
+service:
+  enabled: true
+  type: LoadBalancer
+  annotations: {}
+  labels: {}
+  spec:
+    loadBalancerIP: $traefik_ip
+  loadBalancerSourceRanges: []
+  externalIPs: []
