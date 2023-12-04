@@ -24,6 +24,9 @@ use_ssh_passphrase="true" # If your ssh-key has a passphrase, set this to true
 copy_ssh_id="false"       # Set this to true to copy the ssh-key into the nodes. False if the nodes already have the keys
 cert_name=id_rsa          # The file name for your ssh-key, expected to be in the .ssh or home directory of user running this script
 user=lukium               # the name of the user on the remote machines
+wipe_config="true"        # Set this to true to wipe the k3s config files on this node. False if you want to keep the config files
+                          # If you will be installing k3s again from this node, set this to true, otherwise, the new install will fail
+                          # This will delete the ~/.kube folder and all files in it
 
 # IMPORTANT: Master Nodes must be named "master#" in the next section
 # feel free to name other nodes anything you like for organizational purposes.
@@ -93,7 +96,7 @@ read -p ""
 
 
 # if use_ssh_passphrase, then check if id_rsa is in .ssh folder if not run from home folder
-if [ "$use_ssh_passphrase" = "true" ] ; then
+if [ $use_ssh_passphrase = "true" ] ; then
     if [ ! -f ~/.ssh/id_rsa ] ; then
         echo "$cert_name not found in ~/.ssh folder, checking home folder"
         if [ ! -f ~/id_rsa ] ; then
@@ -142,10 +145,22 @@ for node in $(printf "%s\n" "${!agents[@]}" | sort); do
     fi    
 done
 
+# Wipe the config files on this node if wipe_config is true
+if [ $wipe_config = "true" ] ; then
+    echo -e "\e[31mWiping config files on this node\e[0m"
+    # Delete the ~/.kube folder only if it exists, otherwise, let the user know that it does not exist
+    if [ -d ~/.kube ] ; then
+        rm -rf ~/.kube
+        echo -e "\e[32mConfig files wiped\e[0m"
+    else
+        echo -e "\e[31m~/.kube folder does not exist\e[0m"
+    fi    
+fi
+
 echo -e "\e[32mAll nodes wiped\e[0m"
 
 # Kill the ssh-agent
-if [ "$use_ssh_passphrase" = true ] ; then
+if [ $use_ssh_passphrase = "true" ] ; then
     echo "Killing ssh-agent with PID: $SSH_AGENT_PID"
     kill $SSH_AGENT_PID
 fi
