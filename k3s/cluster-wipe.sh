@@ -142,13 +142,15 @@ for node in $(printf "%s\n" "${!agents[@]}" | sort); do
     fi    
 done
 
+echo -e "\e[32mAll nodes wiped\e[0m"
+
 # Kill the ssh-agent
 if [ "$use_ssh_passphrase" = true ] ; then
     echo "Killing ssh-agent with PID: $SSH_AGENT_PID"
     kill $SSH_AGENT_PID
 fi
 
-echo -e "\e[32mAll nodes wiped\e[0m"
-
 # Unset all variables
 unset use_ssh_passphrase copy_ssh_id cert_name user nodes masters agents node ssh_agent_output SSH_AGENT_PID
+
+echo -e "\e[32mssh-agent killed and variables unset\e[0m"
