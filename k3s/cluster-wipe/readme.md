@@ -16,7 +16,7 @@ The nodes array is the list of hosts that the script will connect to for wiping 
 - node key: [node type][node number] Examples: master1, master2, worker4, storage3 **Master nodes must be named master**
 - node IP address: [IPv4 node IP] Examples: 192.168.1.10, 10.10.6.100
 
-An example list of nodes would look something like this:
+An example list of nodes would look something like this:  
 nodes[master1]=192.168.10.171  
 nodes[master2]=192.168.10.172  
 nodes[master3]=192.168.10.173  
