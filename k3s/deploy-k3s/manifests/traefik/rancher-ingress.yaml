@@ -1,0 +1,41 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: 'default-headers'
+  namespace: cattle-system
+spec:
+  headers:
+    browserXssFilter: true
+    contentTypeNosniff: true
+    customFrameOptionsValue: SAMEORIGIN
+    customRequestHeaders:
+      X-Forwarded-Proto: https
+    forceSTSHeader: true
+    stsIncludeSubdomains: true
+    stsPreload: true
+    stsSeconds: 15552000
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+    kubernetes.io/ingress.class: traefik-external
+  name: 'rancher'
+  namespace: cattle-system
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`www.rancher.$traefik_domain`)
+      services:
+        - name: rancher
+          port: 443
+    - kind: Rule
+      match: Host(`rancher.$traefik_domain`)
+      middlewares:
+        - name: default-headers
+      services:
+        - name: rancher
+          port: 443
+  tls:
+    secretName: $traefik_secret
