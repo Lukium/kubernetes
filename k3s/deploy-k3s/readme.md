@@ -7,7 +7,7 @@ Full readme coming soon, in the meantime, the script is well commented and shoul
 - Run from $HOME
 
 ## Features:
-Deploy in one shot:
+#### Deploy in one shot:
 - K3S to master, storage(longhorn), and worker(non-longhorn) nodes
 - Kube-VIP for HA on the master nodes
 - MetalLB for loadbalancing services
