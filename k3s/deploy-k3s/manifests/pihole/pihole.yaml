@@ -36,7 +36,7 @@ spec:
       services:
         - name: pihole
           port: 80
-    - match: Host(`pihole.traefik_domain`)
+    - match: Host(`pihole.$traefik_domain`)
       kind: Rule
       services:
         - name: pihole
