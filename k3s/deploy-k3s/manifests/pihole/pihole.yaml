@@ -167,6 +167,6 @@ spec:
     targetPort: 53
   selector:
     app: pihole
-  externalTrafficPolicy: Local
+  externalTrafficPolicy: Cluster
   loadBalancerIP: $pihole_ip
   type: LoadBalancer  
