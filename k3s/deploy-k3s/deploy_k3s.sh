@@ -103,6 +103,9 @@ rancher_hostname="rancher.local"
 rancher_bootstrap_password="admin"      
 # The password you want to use for rancher. Will be changed on first login
 
+expose_rancher="true"
+# Set this to true to expose rancher using a load balancer. Set this to false to skip exposing rancher
+
 #  ╔════════════════════════╗
 #  ║   Longhorn Variables   ║
 #  ╚════════════════════════╝                                   
@@ -424,6 +427,13 @@ echo -e "\033[32;5mMetalLB Namespace created successfully!\033[0m"
 # Install MetalLB
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/$metallb_version/config/manifests/metallb-native.yaml
 
+# Wait until a pod has been created for the metallb system, suppress output
+echo -e "\e[32mWaiting for MetalLB pod to be created\e[0m"
+while [ "$(kubectl get pods -n metallb-system -o jsonpath='{.items[0].metadata.name}' 2>/dev/null )" = "" ]; do
+    echo -e "\e[32mMetalLB pod not created, waiting 3 seconds\e[0m"
+    sleep 3
+done
+
 # Wait for MetalLB to be ready
 echo -e "\e[32mWaiting for MetalLB to be ready\e[0m"
 kubectl wait --namespace metallb-system \
@@ -538,13 +548,6 @@ if [ $install_rancher = "true" ] ; then
     kubectl -n cattle-system rollout status deploy/rancher # Wait for Rancher to be ready
     echo -e "\e[32mRancher installed successfully\e[0m"
 
-    echo -e "\e[32mExposing the Rancher Service\e[0m"
-    kubectl expose deployment rancher \
-    --name rancher-lb \
-    --port=443 \
-    --type=LoadBalancer \
-    -n cattle-system
-    echo -e "\e[32mRancher Service exposed successfully\e[0m"
 fi
 
 #####################################
@@ -723,6 +726,16 @@ if [ $install_pihole = "true" ] ; then
     echo -e "\e[32mPiHole installed successfully\e[0m"
 fi
 
+if [ $expose_rancher = "true" ] ; then
+    echo -e "\e[32mExposing the Rancher Service\e[0m"
+    kubectl expose deployment rancher \
+    --name rancher-lb \
+    --port=443 \
+    --type=LoadBalancer \
+    -n cattle-system
+    echo -e "\e[32mRancher Service exposed successfully\e[0m"
+fi
+
 # Kill ssh-agent if use_ssh_passphrase is true
 if [ $use_ssh_passphrase = "true" ] ; then
     echo -e "\e[32mKilling ssh-agent\e[0m"
@@ -736,10 +749,10 @@ if [ $no_SHKC = "true" ] ; then
 fi
 
 # Make recommendations to the user
-echo -e "\e[32   ___  ___  ___  __   __ __  __ __  ___  __  _  __    __  _____  _   __   __  _   __  \e[0m";
-echo -e "\e[32  | _ \| __|/ _/ /__\ |  V  ||  V  || __||  \| || _\  /  \|_   _|| | /__\ |  \| |/' _/ \e[0m";
-echo -e "\e[32  | v /| _|| \__| \/ || \_/ || \_/ || _| | | ' || v || /\ | | |  | || \/ || | ' |\`._\ \e[0m";
-echo -e "\e[32  |_|_\|___|\__/ \__/ |_| |_||_| |_||___||_|\__||__/ |_||_| |_|  |_| \__/ |_|\__||___/ \e[0m";
+echo -e "\e[32m   ___  ___  ___  __   __ __  __ __  ___  __  _  __    __  _____  _   __   __  _   __  \e[0m";
+echo -e "\e[32m  | _ \| __|/ _/ /__\ |  V  ||  V  || __||  \| || _\  /  \|_   _|| | /__\ |  \| |/' _/ \e[0m";
+echo -e "\e[32m  | v /| _|| \__| \/ || \_/ || \_/ || _| | | ' || v || /\ | | |  | || \/ || | ' |\`._\ \e[0m";
+echo -e "\e[32m  |_|_\|___|\__/ \__/ |_| |_||_| |_||___||_|\__||__/ |_||_| |_|  |_| \__/ |_|\__||___/ \e[0m";
 echo
 echo
 
