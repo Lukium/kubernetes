@@ -60,7 +60,7 @@ copy_ssh_id="false"
 # Set this to true to copy the ssh-key into the nodes. False if the nodes already have the keys
 
 cert_name=id_rsa                        
-# The file name for your ssh-key, expected to be in the .ssh or home directory of user running  script
+# The file name for your ssh-key, expected to be in the .ssh or home directory of user running script
 
 no_SHKC="true"                          
 # Set this to true to disable StrictHostKeyChecking for the script.
@@ -267,6 +267,13 @@ sudo timedatectl set-ntp on
 if [ $no_SHKC = "true" ] ; then
     echo -e "\e[32;5mDisabling StrictHostKeyChecking\e[0m"
     echo "StrictHostKeyChecking no" > $HOME/.ssh/config
+fi
+
+# Check if SSH_AUTH_SOCK is set and the agent is running
+if [ -z "$SSH_AUTH_SOCK" ] || ! ssh-add -l >/dev/null 2>&1; then
+    echo "Starting ssh-agent"
+    eval "$(ssh-agent -s)"
+    SSH_AGENT_STARTED="yes"
 fi
 
 # if use_ssh_passphrase, then check if id_rsa is in .ssh folder if not run from home folder
